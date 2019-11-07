@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>登录</title>
+  <meta name="description" content="particles.js is a lightweight JavaScript library for creating particles.">
+  <meta name="author" content="Vincent Garreau" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet"  href="./css/style.css">
+  <link rel="stylesheet" type="text/css" href="./css/reset.css"/>
+</head>
+<body>
+
+<div id="particles-js">
+		<div class="login">
+			<div class="login-top">
+				登录
+			</div>
+            <form id="login_form">
+			<div class="login-center clearfix">
+				<div class="login-center-img"><img src="./images/name.png"/></div>
+				<div class="login-center-input">
+					<input type="text" name="UserName" id="UserName" placeholder="请输入您的用户名" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的用户名'"/>
+					<div class="login-center-input-text">用户名</div>
+				</div>
+			</div>
+			<div class="login-center clearfix">
+				<div class="login-center-img"><img src="./images/password.png"/></div>
+				<div class="login-center-input">
+					<input type="password" name="UserPass" id="UserPass" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'"/>
+					<div class="login-center-input-text">密码</div>
+				</div>
+			</div>
+			<div class="login-button">
+				登陆
+			</div>
+            </form>
+		</div>
+		<div class="sk-rotating-plane"></div>
+</div>
+
+<!-- scripts -->
+<script src="./js/jquery.min.js"></script>
+<script src="./lib/layui/layui.js" charset="utf-8"></script>
+<script src="./js/particles.min.js"></script>
+<script src="./js/app.js"></script>
+<script>
+    layui.use(['form','layer'], function() {
+        var form = layui.form;
+        var layer = layui.layer;
+
+        $('.login-button').on('click',function () {
+            var UserName = $('#UserName').val();
+            var UserPass = $('#UserPass').val();
+            $.ajax({
+                type:"post",
+                url:"/login",
+                dataType:"json",
+                data:{UserName:UserName,UserPass:UserPass},
+                success:function(res){
+                	//console.log(res);
+                    if(res.length == 1){
+                    	url = "index.html?"+window.btoa(window.encodeURIComponent("id="+res[0].id));
+						window.location.href = url;
+                    }else{
+                        layer.msg("登录失败", {icon: 2,time: 2000 }, function(){});
+                    }
+                }
+            });
+        })
+
+
+    });
+
+</script>
+</body>
+</html>

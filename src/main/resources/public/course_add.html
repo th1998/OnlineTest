@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>创建题库</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <link rel="stylesheet" href="./css/font.css">
+        <link rel="stylesheet" href="./css/xadmin.css">
+        <script src="./js/jquery.min.js"></script>
+        <script src="./lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="./js/xadmin.js"></script>
+        <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    <body>
+    <div class="x-nav">
+            <span class="layui-breadcrumb">
+                <a href="">首页</a>
+                <a>
+                    <cite>课程添加</cite></a>
+            </span>
+        <a class="layui-btn layui-btn-small btn-color" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+            <i class="layui-icon layui-icon-refresh " style="line-height:30px"></i>
+        </a>
+    </div>
+
+    <div class="layui-fluid">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">基本信息</div>
+                <div class="layui-card-body ">
+                    <form class="layui-form"  enctype="multipart/form-data">
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">课程名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="c_name" name="c_name" autocomplete="off" class="layui-input" lay-verify="required" >
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">课程讲师</label>
+                            <div class="layui-input-block">
+                                <input type="text"  name="c_teacher" autocomplete="off" class="layui-input" lay-verify="required" >
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item"  id="type" >
+                            <label class="layui-form-label" >课程类型</label>
+                            <div class="layui-input-block" style="width: 200px;">
+                                <select name="c_type" id="c_type"  lay-filter="st_type"  lay-verify="required" style="width: 200px;">
+                                    <option value="1" checked>必修</option>
+                                    <option value="0">选修</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">课程状态</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="c_status" value="1" title="开启" checked>
+                                <input type="radio" name="c_status" value="0" title="关闭">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-upload">
+                                <label class="layui-form-label">视频资源</label>
+                                <input class="layui-btn test btn-color" type="button" value="选择课程视频">
+                                </br><input id="upload" class="layui-btn btn-color" type="button" value="上传" style="margin-top: 10px;">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">课程说明</label>
+                            <div class="layui-input-block">
+                                <textarea placeholder="请输入内容" class="layui-textarea" name="c_explain" id="c_explain" lay-verify="required|introduce" ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="submit" class="layui-btn btn-color" lay-submit lay-filter="entry">立即提交</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </body>
+    <script>
+
+        $("#up").click(function () {
+            $("#imgFile").click();
+        });
+        function uploadImg(f){
+            var str = "";
+            for(var i=0;i<f.length;i++){
+                var reader = new FileReader();
+                reader.readAsDataURL(f[i]);
+                reader.onload = function(e){
+                    $('#demo2').append('<img src="'+e.target.result+'"  class="layui-upload-img" width="130px">')
+                }
+            }
+
+        }
+
+        layui.use(['form','upload'], function() {
+            var form = layui.form;
+            var upload = layui.upload;
+            form.render();
+
+            var videoURL;
+            var imgURL;
+            upload.render({
+                elem: '.test'
+                , accept: 'file'
+                , url: '/uploadVideo'
+                , size: 100000
+                , auto: false //选择文件后不自动上传
+                , bindAction: '#upload' //指向一个按钮触发上传
+                , before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                    layer.load(); //上传loading
+                },choose: function (obj) {
+                        //将每次选择的文件追加到文件队列
+                        var files = obj.pushFile();
+                        console.log(files)
+                },multiple: true
+                , allDone: function (obj) { //当文件全部被提交后，才触发
+                    // console.log(obj.total); //得到总文件数
+                    // console.log(obj.successful); //请求成功的文件数
+                    // console.log(obj.aborted); //请求失败的文件数\
+                    layer.closeAll('loading'); //关闭loading
+                    layer.msg("资源上传成功,请完成基本信息的提交");
+                }
+                ,done: function(obj){
+                    console.log(obj)
+                    if(typeof  obj.imageurl != "undefined"){
+                        imgURL = obj.imageurl;
+                    }
+                    if(typeof  obj.videourl != "undefined"){
+                        videoURL =obj.videourl;
+                    }
+                }
+                ,error: function(index, upload){
+                    layer.closeAll('loading'); //关闭loading
+                    layer.msg("视频资源上传失败");
+                }
+            })
+
+
+
+            form.on('submit(entry)', function(data){
+
+               console.log(data.field);
+               console.log(videoURL);
+                console.log(imgURL);
+                $.ajax({
+                    type:"POST",
+                    url:"/addCourse",
+                    data:{c_name:data.field.c_name,c_teacher:data.field.c_teacher,c_type:data.field.c_type,
+                        c_status:data.field.c_status,c_imgurl:imgURL,c_videourl:videoURL,c_explain:data.field.c_explain},
+                    success:function (res) {
+                        if(res.flag == 1){
+                            layer.msg(res.content, {icon: 1,time: 2000 }, function(){
+                                location.reload();
+                            });
+                        }else{
+                            layer.msg(res.content, {icon: 2,time: 2000 }, function(){
+                                location.reload();
+                            });
+                        }
+                    }
+                });
+                return false;
+            })
+
+        })
+
+    </script>
+
+</html>

@@ -1,0 +1,222 @@
+<!doctype html>
+<html class="x-admin-sm"  xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>学习系统后台</title>
+        <meta name="renderer" content="webkit|ie-comp|ie-stand">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+        <link rel="stylesheet" href="./css/font.css">
+        <link rel="stylesheet" href="./css/xadmin.css">
+        <!-- <link rel="stylesheet" href="./css/theme5.css"> -->
+        <script src="./js/jquery.min.js"></script>
+        <script src="./lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="./js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <script>
+            // 是否开启刷新记忆tab功能
+            var is_remember = false;
+        </script>
+    </head>
+    <body class="index">
+        <!-- 顶部开始 -->
+        <div class="container">
+            <div class="logo">
+                <a href="./index.html">X-admin v2.2</a></div>
+            <div class="left_open">
+                <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
+            </div>
+
+            <ul class="layui-nav right" lay-filter="">
+                <li class="layui-nav-item">
+                    <a href="javascript:;" id="userName"></a>
+                    <dl class="layui-nav-child">
+                        <!-- 二级菜单 -->
+                        <dd>
+                            <a >个人信息</a></dd>
+                        <dd>
+                            <a href="./login.html">退出</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item to-index">
+                    <a href="/">前台首页</a></li>
+            </ul>
+        </div>
+        <!-- 顶部结束 -->
+        <!-- 中部开始 -->
+        <!-- 左侧菜单开始 -->
+        <div class="left-nav">
+            <div id="side-nav">
+                <ul id="nav">
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="用户管理">&#xe6b8;</i>
+                            <cite>用户管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('用户列表','user_list.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>用户列表</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="题库管理">&#xe83c;</i>
+                            <cite>题库管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('创建题库','tk_add.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>创建题库</cite></a>
+                            </li>
+                        </ul>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('题库列表','tk_list.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>题库列表</cite></a>
+                            </li>
+                        </ul>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('录入试题','st_add.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>录入试题</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="课程管理">&#xe723;</i>
+                            <cite>课程管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('课程添加','course_add.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>课程添加</cite></a>
+                            </li>
+                        </ul>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('课程列表','course_list.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>课程列表</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="学习系统">&#xe705;</i>
+                            <cite>学习系统</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('课程列表','s_course_list.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>课程列表</cite></a>
+                            </li>
+                        </ul>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('多级分类','cate.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>学习记录</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="自我检测">&#xe74e;</i>
+                            <cite>自我检测</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('多级分类','cate.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>测试练习</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="个人信息">&#xe74e;</i>
+                            <cite>个人信息</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('多级分类','cate.html')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>信息维护</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!-- <div class="x-slide_left"></div> -->
+        <!-- 左侧菜单结束 -->
+        <!-- 右侧主体开始 -->
+        <div class="page-content">
+            <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+                <ul class="layui-tab-title">
+                    <li class="home">
+                        <i class="layui-icon">&#xe68e;</i>我的桌面</li></ul>
+                <div class="layui-unselect layui-form-select layui-form-selected" id="tab_right">
+                    <dl>
+                        <dd data-type="this">关闭当前</dd>
+                        <dd data-type="other">关闭其它</dd>
+                        <dd data-type="all">关闭全部</dd></dl>
+                </div>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <iframe src='./welcome.html' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+                    </div>
+                </div>
+                <div id="tab_show"></div>
+            </div>
+        </div>
+        <div class="page-content-bg"></div>
+
+        <style id="theme_style"></style>
+        <!-- 右侧主体结束 -->
+        <!-- 中部结束 -->
+    </body>
+    <script>
+
+        var paramsString = window.location.search;    //从问号 (?) 开始的 URL（查询部分）
+        var str = paramsString.toString().split("?");
+        var datas = str[1];
+        var decodeData = window.decodeURIComponent(window.atob(datas));    //解密
+
+        console.log(decodeData )
+        var num=decodeData.toString().split("=");
+        var id=parseInt(num[1]);
+        console.log(id);
+
+        var userid;
+        $.ajax({
+            type: "post",
+            url: "/findUserId",
+            data: {id: id},
+            success: function (res) {
+                console.log(res)
+                $("#userName").html(res[0].userName);
+                userid = res[0].id;
+                localStorage.setItem("uid", userid);
+
+            }
+        });
+
+
+    </script>
+</html>

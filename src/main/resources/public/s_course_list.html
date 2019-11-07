@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>课程列表</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <link rel="stylesheet" href="./css/font.css">
+        <link rel="stylesheet" href="./css/xadmin.css">
+        <script src="./js/jquery.min.js"></script>
+        <script src="./lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="./js/xadmin.js"></script>
+        <style>
+            .layui-table-cell {
+                height: auto;
+                overflow: visible;
+                text-overflow: inherit;
+                white-space: normal;
+            }
+            .course_box{
+                width:200px;
+                height: 300px;
+                float: left;
+                margin-left: 20px;
+                margin-top: 20px;
+                background: #eaeaea;
+                border-radius:5px;
+            }
+            .pic img{
+                border-radius:5px;
+            }
+            .course_box:hover{
+                background: rgba(180,208,223,0.5);
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a>
+              <cite>课程列表</cite></a>
+          </span>
+          <a class="layui-btn layui-btn-small btn-color" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+            <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+        </div>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+
+
+                            <div class="layui-carousel" id="test1">
+                                <div carousel-item>
+                                    <div><img src="./images/banner1.jpg" width="100%" height="100%"></div>
+                                    <div><img src="./images/banner2.jpg" width="100%" height="100%"></div>
+                                    <div><img src="./images/banner3.jpg" width="100%" height="100%"></div>
+                                </div>
+                            </div>
+
+
+
+                        <div class="layui-card-body " >
+                            <div id="tableId">
+
+                                <!--
+                                <div class="course_box">
+                                    <div class="">
+                                        <div class="pic"><img src="./images/upload/20191029195514_75.jpg" width="200" height="200"></div>
+                                        <div class="c_teacher">课程讲师：<span>张三</span></div>
+                                        <div class="c_type">课程类型：<span>必修</span></div>
+                                        <div class="c_teacher">课程简介：<span>测试测试测试</span></div>
+                                    </div>
+                                </div>
+                                <div style="clear: both;"></div>
+                                -->
+
+
+                            </div>
+                        </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </body>
+    <script type="text/html" id="caozuo">
+        <button  class='layui-btn layui-btn-normal ' >修改</button >
+        <button  class='layui-btn ' >数据统计</button >
+        <button  class='layui-btn layui-btn-danger ' >删除</button >
+    </script>
+    <script type="text/html" id="pic">
+        <p><img src="./images{{d.tk_pic}}" style="width: 80px;height: 60px;"> </p>
+    </script>
+    <script type="text/html" id="status">
+        {{#  if(d.tk_status == 1){ }}
+        <p  style="color: #00FF00;">开启</p>
+        {{#  } else { }}
+        <p  style="color: #FF0000;">关闭</p>
+        {{#  } }}
+    </script>
+    <script type="text/html" id="amount">
+        <a href="user_list.html"  class="layui-table-link" style="color: #01AAED;font-size: 26px;">{{d.amount}}</a>
+    </script>
+<script>
+
+    var uid = localStorage.getItem("uid");
+    console.log(uid)
+
+    layui.use(['carousel','form'], function(){
+        var carousel = layui.carousel;
+        var form = layui.form;
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            ,width: '100%' //设置容器宽度
+            ,arrow: 'always' //始终显示箭头
+            //,anim: 'updown' //切换动画方式
+        });
+
+        $.ajax({
+            type:"post",
+            url:"/getCourse",
+            success:function(res){
+                // console.log(res);
+                for(var i = 0 ;i<res.length;i++){
+                    if(res[i].c_type == 1){
+                        $('#tableId').append('<a href="s_study.html?id='+res[i].c_id+'"><div class="course_box">\n' +
+                            '                                    <div class="">\n' +
+                            '                                        <div class="pic"><img src="./video'+res[i].c_imgurl+'" width="200" height="200"></div>\n' +
+                            '                                        <div class="c_teacher">课程讲师：<span>'+res[i].c_teacher+'</span></div>\n' +
+                            '                                        <div class="c_type">课程类型：<span>必修</span></div>\n' +
+                            '                                        <div class="c_teacher">课程简介：<span>'+res[i].c_explain+'</span></div>\n' +
+                            '                                    </div>\n' +
+                            '                 </div></a>')
+                    }else{
+                        $('#tableId').append('<div class="course_box">\n' +
+                            '                                    <div class="">\n' +
+                            '                                        <div class="pic"><img src="./video'+res[i].c_imgurl+'" width="200" height="200"></div>\n' +
+                            '                                        <div class="c_teacher">课程讲师：<span>'+res[i].c_teacher+'</span></div>\n' +
+                            '                                        <div class="c_type">课程类型：<span>选修</span></div>\n' +
+                            '                                        <div class="c_teacher">课程简介：<span>'+res[i].c_explain+'</span></div>\n' +
+                            '                                    </div>\n' +
+                            '                 </div>')
+                    }
+
+                }
+                $("div[class=course_box]:last").append('<div style="clear: both;"></div>')
+            }
+        });
+
+    });
+
+
+
+</script>
+</html>
