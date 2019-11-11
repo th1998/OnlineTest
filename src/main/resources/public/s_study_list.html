@@ -2,7 +2,7 @@
 <html class="x-admin-sm">
 <head>
     <meta charset="UTF-8">
-    <title>题库列表</title>
+    <title>学习记录</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="stylesheet" href="./css/font.css">
@@ -23,7 +23,7 @@
           <span class="layui-breadcrumb">
             <a href="">首页</a>
             <a>
-              <cite>题库列表</cite></a>
+              <cite>学习记录</cite></a>
           </span>
     <a class="layui-btn layui-btn-small btn-color" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
         <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
@@ -55,25 +55,12 @@
     </div>
 </div>
 </body>
-<script type="text/html" id="caozuo">
-    <button  class='layui-btn layui-btn-normal ' >修改</button >
-    <button  class='layui-btn layui-btn-danger ' >删除</button >
-</script>
-<script type="text/html" id="pic">
-    <p><img src="./video{{d.c_imgurl}}" style="width: 80px;height: 60px;"> </p>
-</script>
-<script type="text/html" id="status">
-    {{#  if(d.c_status == 1){ }}
-    <p  style="color: #00FF00;">开启</p>
+
+<script type="text/html" id="progress">
+    {{#  if(d.progress == "NaN%"){ }}
+    <p>0%</p>
     {{#  } else { }}
-    <p  style="color: #FF0000;">关闭</p>
-    {{#  } }}
-</script>
-<script type="text/html" id="type">
-    {{#  if(d.c_type == 1){ }}
-    <p>必修</p>
-    {{#  } else { }}
-    <p>选修</p>
+    <p>{{ d.progress }}</p>
     {{#  } }}
 </script>
 <script>
@@ -83,19 +70,17 @@
         form.render();
 
 
-
+        var u_id = localStorage.getItem("uid");
 
         table.render({
             elem: '#tableId',
-            url:'/getCourseList',
+            url:'/getRecord',
+            where:{u_id:u_id},
             response:{statusCode:0},
             cols: [[
-                {field:'c_name', title: '课程名称',}
-                ,{field:'c_imgurl',title: '课程图标',templet: '#pic'}
-                ,{field:'c_teacher',title: '课程讲师',templet: '#amount'}
-                ,{field:'c_type', title: '课程类型',templet: '#type'}
-                ,{field:'c_status',title: '课程状态',templet: '#status'}
-                ,{ title: '操作', templet: '#caozuo'}
+                {field:'c_name', title: '课程名称'}
+                ,{field:'c_teacher',title: '课程讲师'}
+                ,{field:'progress', title: '学习进度',templet: '#progress'}
             ]],
             limits : [ 8, 10,12, 15 ],
             limit : 8,

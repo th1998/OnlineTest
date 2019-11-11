@@ -127,7 +127,7 @@
                         </ul>
                         <ul class="sub-menu">
                             <li>
-                                <a onclick="xadmin.add_tab('多级分类','cate.html')">
+                                <a onclick="xadmin.add_tab('学习记录','s_study_list.html')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>学习记录</cite></a>
                             </li>
@@ -212,8 +212,9 @@
                 console.log(res)
                 $("#userName").html(res[0].userName);
                 userid = res[0].id;
+                var userName = res[0].userName;
                 localStorage.setItem("uid", userid);
-
+                localStorage.setItem("uname", userName);
             }
         });
 

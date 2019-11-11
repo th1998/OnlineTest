@@ -51,8 +51,8 @@
             </div>
         </div>
 
-
-
+        <div class="c_name" style="display: none;"></div>
+        <div class="c_teacher" style="display: none;"></div>
     </body>
 
 
@@ -78,10 +78,58 @@
                 $('#teacher').html(res[0].c_teacher)
                 $('#explain').html(res[0].c_explain)
                 $('#v_study').attr('src','./video'+res[0].c_videourl)
+                $('.c_name').html(res[0].c_name)
+                $('.c_teacher').html(res[0].c_teacher)
             }
         });
 
     });
+
+
+    $("#v_study").on("timeupdate",function(event){
+        onTrackedVideoFrame(this.currentTime, this.duration,this.paused);
+    });
+
+    function onTrackedVideoFrame(currentTime, duration,flag) {
+        var a = currentTime / duration;
+        var b = (a * 100).toFixed(0) + "%";
+        // console.log(b);
+        if(flag == true|currentTime == duration){
+
+            var c_name=$('.c_name').html();
+            var c_teacher=$('.c_teacher').html();
+            var u_id = localStorage.getItem("uid")
+            var u_name = localStorage.getItem("uname")
+            $.ajax({
+                type:"post",
+                url:"/pdjlStudyTime",
+                data:{c_id:c_id,u_id:u_id},
+                success:function(res){
+                    if(res.length == 1){
+                        console.log("有记录")
+                        console.log(b);
+                        $.ajax({
+                            type:"post",
+                            url:"/xgStudyTime",
+                            data:{progress:b,r_id:res[0].r_id},
+                            success:function(res){
+                            }
+                        });
+                    }else{
+                        console.log("无记录")
+                        $.ajax({
+                            type:"post",
+                            url:"/jlStudyTime",
+                            data:{progress:b,c_id:c_id,c_name:c_name,c_teacher:c_teacher,u_id:u_id,u_name:u_name},
+                            success:function(res){
+                            }
+                        });
+                    }
+                }
+            });
+
+        }
+    }
 
 
 

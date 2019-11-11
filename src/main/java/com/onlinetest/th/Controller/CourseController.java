@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.onlinetest.th.Model.Course;
 import com.onlinetest.th.Model.Question_bank;
+import com.onlinetest.th.Model.Record;
 import com.onlinetest.th.Model.ResultMsg;
 import com.onlinetest.th.Service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,5 +141,57 @@ public class CourseController {
     @ResponseBody
     public List<Course> getOneCourse(Integer c_id){
         return courseService.getOneCourse(c_id);
+    }
+
+    @RequestMapping("/jlStudyTime")
+    @ResponseBody
+    public ResultMsg jlStudyTime(String progress,Integer c_id,String c_name,String c_teacher,Integer u_id,String u_name){
+//        System.out.println(progress);
+//        System.out.println(c_id);
+//        System.out.println(c_name);
+//        System.out.println(c_teacher);
+//        System.out.println(u_id);
+//        System.out.println(u_name);
+        Record r = new Record();
+        r.setU_id(u_id);
+        r.setC_id(c_id);
+        r.setC_name(c_name);
+        r.setC_teacher(c_teacher);
+        r.setU_name(u_name);
+        r.setProgress(progress);
+
+        int i = courseService.jlStudyTime(r);
+        if(i>0){
+            return new ResultMsg(1,"记录成功！");
+        }else{
+            return new ResultMsg(1,"记录失败！");
+        }
+    }
+
+    @RequestMapping("/pdjlStudyTime")
+    @ResponseBody
+    public List<Record> pdjlStudyTime(Integer u_id,Integer c_id){
+        return courseService.pdjlStudyTime(u_id,c_id);
+    }
+
+    @RequestMapping("/xgStudyTime")
+    @ResponseBody
+    public int xgStudyTime(Integer r_id,String progress){
+        System.out.println(progress);
+        System.out.println(r_id);
+        int i = courseService.xgStudyTime(r_id, progress);
+        return i;
+    }
+
+    @RequestMapping("/getRecord")
+    @ResponseBody
+    public Map getRecord(String page, String limit,Integer u_id){
+        System.out.println(u_id);
+        PageHelper.startPage(Integer.valueOf(page).intValue(), Integer.valueOf(limit).intValue());
+        List<Record> list = courseService.getRecord(page, limit, u_id);
+        PageInfo pageInfo = new PageInfo(list);
+        Map<String,Object> map = new HashMap<>();
+        map.put("data",pageInfo);
+        return map;
     }
 }
